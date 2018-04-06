@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Git in WebStorm</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen-16x10.css">
+</head>
+<body class="shower list">
+
+<header class="caption">
+    <h1>Собираем свой Google Static Maps</h1>
+</header>
+
+<section class="slide clear" id="cover">
+    <header>
+        <h2>Собираем свой Google Static Maps</h2>
+        <p>Миша Баранов, PiterJS #24cov</p>
+    </header>
+    <figure>
+        <img class="cover w" src="pictures/cover.jpg">
+        <figcaption class="white">
+            <a href="https://www.threadless.com/@conceptart12">© Matt Hoch</a>
+        </figcaption>
+    </figure>
+    <style>
+        #cover header {
+            transform: translateY(-80%);
+            text-align: center;
+        }
+
+        #cover h2 {
+            margin: 0;
+            font-size: 32px;
+            color: #FFF;
+        }
+
+        #cover p {
+            margin: 0;
+            font-size: 20px;
+            color: #999;
+        }
+
+        #cover p a {
+            color: #FFF;
+        }
+    </style>
+</section>
+
+<section class='slide'>
+    <h2>Постановка задачи</h2>
+
+    <ul>
+        <li class='next'>Мониторинг грузовиков</li>
+        <li class='next'>Оперативный мониторинг грузовиков</li>
+        <li class='next'>Чтобы само всё рассказывало</li>
+    </ul>
+</section>
+
+<section class='slide'>
+    <h2>
+        Решение
+    </h2>
+
+    <ul>
+        <li class='next'>Телеграм-бот</li>
+    </ul>
+</section>
+
+<div class='slide black clear'>
+    <figure>
+        <img src='pictures/map.jpg' class='cover' height='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide black clear'>
+    <figure>
+        <img src='pictures/map-numbered.jpg' class='cover' height='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide black clear'>
+    <figure>
+        <img src='pictures/map-bug.jpg' class='cover' height='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/docs.png' class='cover' width='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/docs-crop.png' class='cover' width='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/docs-blurred.png' class='cover' width='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/headless.png' class='cover' width='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide'>
+    <h2>Алгоритм</h2>
+
+    <ul>
+        <li class='next'>Отправляем geojson</li>
+        <li class='next'>Рисуем карту через Google Maps JS API</li>
+        <li class='next'>Делаем скриншот</li>
+        <li class='next'>Отправялем байты обратно</li>
+    </ul>
+</div>
+
+<div class='slide'>
+    <h2>Превозмогая трудности</h2>
+
+    <ul>
+        <li class='next'>Хром на сервере
+            <ul class='next'>
+                <li>Docker</li>
+            </ul>
+        </li>
+
+        <li class='next'>Недокументированное CLI API</li>
+        <li class='next'>Retina
+            <ul class='next'>
+                <li><span style='color: #ffde57'><strong style='color: #4584b6'>py</strong>ppeteer</span></li>
+                <li class='next'>Нужен Chromium 64</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div class='slide'>
+    <h2>Зачем Docker</h2>
+
+    <ul>
+        <li class='next'>Одинаковое окружение на ноуте и в проде</li>
+        <li class='next'>Легко запускается сложное <em>наши сишные либы</em></li>
+        <li class='next'>Работает на всех платформах
+            <ul class='next'>
+                <li>Linux — стандартые пакеты</li>
+                <li class='next'>Mac — Xyivee</li>
+                <li class='next'>Win — VirtLib / Virtualbox</li>
+            </ul>
+        </li>
+        <li class='next'>Лучшая изоляция</li>
+        <li class='next'>pyppeteer -> puppeteer</li>
+    </ul>
+</div>
+
+<div class='slide'>
+    <h2>Как создать докер-образ и работать с ним</h2>
+</div>
+
+<div class="progress"></div>
+
+<script src="node_modules/shower-core/shower.min.js"></script>
+
+</body>
+</html>
