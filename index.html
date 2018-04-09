@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Git in WebStorm</title>
+    <title>Собираем свой Google Static Maps</title>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +16,7 @@
 <section class="slide clear" id="cover">
     <header>
         <h2>Собираем свой Google Static Maps</h2>
-        <p>Миша Баранов, PiterJS #24cov</p>
+        <p>Миша Баранов, PiterJS #24</p>
     </header>
     <figure>
         <img class="cover w" src="pictures/cover.jpg">
@@ -122,46 +122,257 @@
 </div>
 
 <div class='slide'>
-    <h2>Превозмогая трудности</h2>
+    <h2>GeoJSON</h2>
 
     <ul>
-        <li class='next'>Хром на сервере
-            <ul class='next'>
-                <li>Docker</li>
-            </ul>
-        </li>
+        <li>Стандартный формат представления геоданных</li>
+        <li class='next'><a href='https://tools.ietf.org/html/rfc7946'>RFC 7946</a> (2016)</li>
+        <li class='next'>Легко стилизуеся в GoogleMaps API</li>
+    </ul>
+</div>
 
-        <li class='next'>Недокументированное CLI API</li>
-        <li class='next'>Retina
-            <ul class='next'>
-                <li><span style='color: #ffde57'><strong style='color: #4584b6'>py</strong>ppeteer</span></li>
-                <li class='next'>Нужен Chromium 64</li>
-            </ul>
+<div class='slide clear'>
+<pre>
+<code>{ "type": "FeatureCollection",</code>
+<code>  "features": [ {</code>
+<code>      "type": "Feature",</code>
+<code>      "geometry": { "type": "Point",</code>
+<code>          "coordinates": [ -0.071946, 51.534725 ] },</code>
+<code>      "properties": {</code>
+<code>        "type": "vehicleMarker",</code>
+<code>        "url": "https://goo.gl/W194zv",</code>
+<code>        "size": [ 128, 128 ],</code>
+<code>} ] }</code>
+</pre>
+</div>
+
+<div class='slide'>
+    <h2>Headless Chrome</h2>
+
+    <p>
+        <code>alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"</code>
+    </p>
+</div>
+
+<div class='slide'>
+    <h2>Headless Chrome</h2>
+
+    <pre>
+<code>chrome \</code>
+<code class='next'>  --headless \</code>
+<code class='next'>  --disable-gpu \</code>
+<code class='next'>  --window-size=1200,800 \</code>
+<code class='next'>  --hide-scrollbars \</code>
+<code class='next'>  --screenshot \</code>
+<code>  https://piterjs.org/</code>
+    </pre>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/sample-screenshot.png' class='cover' width='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide'>
+    <h2>Headless Chrome</h2>
+
+    <ul>
+        <li><a href='https://developers.google.com/web/updates/2017/04/headless-chrome'>Быстрый старт</a></li>
+        <li class='next'><a href='https://peter.sh/experiments/chromium-command-line-switches/'>«Документация» к Api</a>
         </li>
     </ul>
 </div>
 
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/cli-api.png' class='cover' width='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide clear'>
+    <h2 class='shout'>Retina</h2>
+</div>
+
+<div class='slide clear'>
+    <figure>
+        <img src='pictures/emulated-devices.png' class='cover' alt=''>
+    </figure>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/headless.png' class='cover' width='90%' alt=''>
+    </figure>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/puppeeter.png' class='cover' alt=''>
+    </figure>
+</div>
+
 <div class='slide'>
-    <h2>Зачем Docker</h2>
+    <h2>Puppeeter</h2>
+
+    <ul>
+        <li><code>npm i puppeteer</code></li>
+        <li class='next'>Developed by the Chrome team</li>
+        <li class='next'><span style='color: #ffde57'><strong style='color: #4584b6'>py</strong>ppeteer</span></li>
+    </ul>
+</div>
+
+<div class='slide clear'>
+    <pre>
+<code>page = await browser.newPage()</code>
+<code>await <mark>page.setViewport</mark>({</code>
+<code>    "width": width,</code>
+<code>    "height": height,</code>
+<code>    <mark>"deviceScaleFactor"</mark>: 2 if hidpi else 1,</code>
+<code>})</code>
+</pre>
+</div>
+
+<div class='slide clear'>
+    <pre>
+<code>await page.goto(url, {</code>
+<code>   <mark>"waitUntil": "networkidle0"</mark>,</code>
+<code>})</code>
+<code>with tempfile.TemporaryDirectory() as tmpdirname:</code>
+<code>    image = await <mark>page.screenshot</mark>({</code>
+<code>      "path": f'{tmpdirname}/image.png'</code>
+<code>    })</code>
+<code>await page.close()</code>
+    </pre>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/on-server.jpg' class='cover' alt=''>
+    </figure>
+</div>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/docker.png' class='cover' alt=''>
+    </figure>
+</div>
+
+<div class='slide'>
+    <h2>Зачем вообще Docker</h2>
 
     <ul>
         <li class='next'>Одинаковое окружение на ноуте и в проде</li>
-        <li class='next'>Легко запускается сложное <em>наши сишные либы</em></li>
         <li class='next'>Работает на всех платформах
             <ul class='next'>
                 <li>Linux — стандартые пакеты</li>
-                <li class='next'>Mac — Xyivee</li>
-                <li class='next'>Win — VirtLib / Virtualbox</li>
+                <li class='next'>Mac — xhyve</li>
+                <li class='next'>Win — Hyper V / VirtualBox</li>
             </ul>
         </li>
         <li class='next'>Лучшая изоляция</li>
-        <li class='next'>pyppeteer -> puppeteer</li>
     </ul>
 </div>
 
 <div class='slide'>
-    <h2>Как создать докер-образ и работать с ним</h2>
+    <h2>Контейнер</h2>
+
+    <ul>
+        <li>Изолированный процесс</li>
+        <li class='next'>Умирает после остановки контейнера</li>
+        <li class='next'>Можно примонтировать каталоги с хоста</li>
+        <li class='next'>Можно открыть порты</li>
+        <li class='next'>
+            <del>Можно грабить корованы</del>
+        </li>
+    </ul>
 </div>
+
+<div class='slide'>
+    <h2>Образ</h2>
+
+    <ul>
+        <li>Код приложения</li>
+        <li class='next'>Зависимости приложения</li>
+        <li class='next'>Операционная система</li>
+        <li class='next'>Контейнер запускается из образа</li>
+    </ul>
+
+    <p class='next'><a href='https://hub.docker.com/explore/'>Официальные образы всего</a></p>
+</div>
+
+<div class='slide'>
+    <h2>Dockerfile</h2>
+
+    <ul>
+        <li>Описание, как собрать образ</li>
+        <li class='next'>Базовый образ</li>
+        <li class='next'>Как ставить зависимости</li>
+        <li class='next'>Откуда брать код</li>
+    </ul>
+
+    <p class='next'><a href='https://docs.docker.com/engine/reference/builder/'>Документация</a></p>
+</div>
+
+<div class='slide'>
+    <h2>Docker Compose</h2>
+
+    <ul>
+        <li>Запуск нескольких связанных контейнеров</li>
+        <li class='next'>Контейнеры используеют общую сеть</li>
+        <li class='next'>Контейнеры получают имена</li>
+    </ul>
+</div>
+
+<div class='slide clear'>
+<pre>
+<code>FROM python:alpine3.7</code>
+<code class='next'>ADD requirements /opt/requirements</code>
+<code class='next'>COPY apk/chromium-64.0.3282.168-r0.apk /</code>
+<code class='next'>COPY src /opt/app</code>
+<code class='next'>RUN apk add --no-cache chromium && \</code>
+<code class='next'>    apk add --allow-untrusted  /chromium-64.0.3282.168-r0.apk && \</code>
+<code class='next'>    rm /chromium-64.0.3282.168-r0.apk && \</code>
+<code class='next'>    pip install --no-cache-dir -r /opt/requirements/base.txt</code>
+<code class='next'>CMD ["python3", "/opt/app/main.py"]</code>
+</pre>
+</div>
+
+<div class='slide'>
+    <h2>Сборка образа</h2>
+
+    <pre>
+<code>docker build -t maps-generator .</code>
+<code class='next'>docker images</code>
+<code class='next'>docker push maps-generator</code>
+</pre>
+</div>
+
+<div class='slide'>
+    <h2>Запуск контейнера</h2>
+
+    <pre>
+    <code>docker run --rm <mark>-p 8080:8080</mark> maps-generator</code>
+<code class='next'>docker run <mark>-d</mark> -p 8080:8080 maps-generator</code>
+<code>docker run <mark>-v $(pwd)/src:/opt/app</mark> maps-generator</code>
+<code>docker run <mark>--name my-maps</mark> maps-generator</code>
+<code>docker ps</code>
+<code>docker ps -a</code>
+<code>docker exec -it <mark>my-maps</mark> bash</code>
+<code>docker kill my-maps</code>
+</pre>
+</div>
+
+<section class="slide white clear">
+    <h2>Спасибо!</h2>
+    <h3>Миша Баранов</h3>
+
+    <ul>
+        <li>mkhl.brnv.ru</li>
+        <li>mkhl@brnv.ru</li>
+        <li>github.com/h4</li>
+    </ul>
+</section>
 
 <div class="progress"></div>
 
