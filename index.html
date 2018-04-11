@@ -6,6 +6,11 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen-16x10.css">
+    <style>
+        .code {
+            padding-top: 50px;
+        }
+    </style>
 </head>
 <body class="shower list">
 
@@ -48,6 +53,26 @@
     </style>
 </section>
 
+<section class="slide white clear">
+    <figure><img src="pictures/about-1.png" alt="" class="cover" width='50%'></figure>
+</section>
+
+<section class="slide white clear">
+    <figure><img src="pictures/about-2.png" alt="" class="cover" width='50%'></figure>
+</section>
+
+<section class="slide black clear">
+    <figure><img src="pictures/arrival.png" alt="" class="cover" width="800"></figure>
+</section>
+
+<section class="slide black clear" >
+    <figure><img src="pictures/istock_loading@1x.jpg" alt="" class="cover"></figure>
+</section>
+
+<section class="slide black clear" >
+    <figure><img src="pictures/arrival-design.png" alt="" class="cover w"></figure>
+</section>
+
 <section class='slide'>
     <h2>Постановка задачи</h2>
 
@@ -67,6 +92,23 @@
         <li class='next'>Телеграм-бот</li>
     </ul>
 </section>
+
+<section class='slide'>
+    <h2>Инструменты</h2>
+
+    <ul>
+        <li>GeoJSON</li>
+        <li class='next'>Headless Chrome</li>
+        <li class='next'>Puppeteer</li>
+        <li class='next'>Docker</li>
+    </ul>
+</section>
+
+<div class='slide white clear'>
+    <figure>
+        <img src='pictures/map-initial.png' class='cover' height='90%' alt=''>
+    </figure>
+</div>
 
 <div class='slide black clear'>
     <figure>
@@ -131,18 +173,49 @@
     </ul>
 </div>
 
-<div class='slide clear'>
+<div class='slide clear code'>
 <pre>
-<code>{ "type": "FeatureCollection",</code>
+<code>{</code>
+<code>  "type": "FeatureCollection",</code>
 <code>  "features": [ {</code>
-<code>      "type": "Feature",</code>
-<code>      "geometry": { "type": "Point",</code>
-<code>          "coordinates": [ -0.071946, 51.534725 ] },</code>
-<code>      "properties": {</code>
-<code>        "type": "vehicleMarker",</code>
-<code>        "url": "https://goo.gl/W194zv",</code>
-<code>        "size": [ 128, 128 ],</code>
+<code>    "type": "Feature",</code>
+<code>    "geometry": {</code>
+<code>      "type": "Point", "coordinates": [ 0.0719, 51.5347 ] },</code>
+<code>    "<mark>properties</mark>": {</code>
+<code>      "<mark>type</mark>": "vehicleMarker",</code>
+<code>      "url": "https://goo.gl/W194zv",</code>
+<code>      "size": [ 128, 128 ]</code>
 <code>} ] }</code>
+</pre>
+</div>
+
+<div class='slide clear code'>
+<pre>
+<code>function setFeatureStyle(feature) {</code>
+    <code>  const type = <mark>feature.getProperty('type')</mark>;</code>
+<code>  switch (type) {</code>
+<code>    case 'vehicleMarker':</code>
+<code>      const image = {</code>
+<code>        url: <mark>feature.getProperty('url')</mark>,</code>
+<code>        size: new google.maps.Size(...feature.getProperty('size')),</code>
+<code>      };</code>
+<code>      return {icon: image,optimized: false};</code>
+<code>  }</code>
+<code>}</code>
+</pre>
+</div>
+
+<div class='slide clear code'>
+<pre>
+<code>function initMap(root) {</code>
+<code>  const map = new google.maps.Map(root);</code>
+<code>  fetch(`http://localhost:8080/map_data?id=${resourceId}`)</code>
+<code>    .then((response) => response.json())</code>
+<code>    .then((data) => {</code>
+<code>      const features = map.data.addGeoJson(data);</code>
+<code>      map.data.setStyle(<mark>setFeatureStyle</mark>);</code>
+<code>    );</code>
+<code>}</code>
 </pre>
 </div>
 
@@ -164,7 +237,7 @@
 <code class='next'>  --window-size=1200,800 \</code>
 <code class='next'>  --hide-scrollbars \</code>
 <code class='next'>  --screenshot \</code>
-<code>  https://piterjs.org/</code>
+<code class='next'>  https://piterjs.org/</code>
     </pre>
 </div>
 
@@ -248,12 +321,6 @@
 
 <div class='slide white clear'>
     <figure>
-        <img src='pictures/on-server.jpg' class='cover' alt=''>
-    </figure>
-</div>
-
-<div class='slide white clear'>
-    <figure>
         <img src='pictures/docker.png' class='cover' alt=''>
     </figure>
 </div>
@@ -262,15 +329,16 @@
     <h2>Зачем вообще Docker</h2>
 
     <ul>
-        <li class='next'>Одинаковое окружение на ноуте и в проде</li>
-        <li class='next'>Работает на всех платформах
+        <li class='next'>Одинаковое окружение у разработчков, тестировщиков и на проде</li>
+        <li class='next'>Работает на всех платформах</li>
+        <li class='next'>Минимальный оверхед
             <ul class='next'>
                 <li>Linux — стандартые пакеты</li>
                 <li class='next'>Mac — xhyve</li>
                 <li class='next'>Win — Hyper V / VirtualBox</li>
             </ul>
         </li>
-        <li class='next'>Лучшая изоляция</li>
+        <li class='next'>Изоляция процессов</li>
     </ul>
 </div>
 
@@ -354,13 +422,23 @@
     <pre>
     <code>docker run --rm <mark>-p 8080:8080</mark> maps-generator</code>
 <code class='next'>docker run <mark>-d</mark> -p 8080:8080 maps-generator</code>
-<code>docker run <mark>-v $(pwd)/src:/opt/app</mark> maps-generator</code>
-<code>docker run <mark>--name my-maps</mark> maps-generator</code>
-<code>docker ps</code>
-<code>docker ps -a</code>
-<code>docker exec -it <mark>my-maps</mark> bash</code>
-<code>docker kill my-maps</code>
+<code class='next'>docker run <mark>-v $(pwd)/src:/opt/app</mark> maps-generator</code>
+<code class='next'>docker run <mark>--name my-maps</mark> maps-generator</code>
+<code class='next'>docker ps</code>
+<code class='next'>docker ps -a</code>
+<code class='next'>docker exec -it <mark>my-maps</mark> bash</code>
+<code class='next'>docker kill my-maps</code>
 </pre>
+</div>
+
+<div class='slide'>
+    <h2>Итого</h2>
+
+    <ul>
+        <li>Число объектов на карте ⟶ ∞</li>
+        <li class='next'>Больший контроль за результатом</li>
+        <li class='next'>Сделали всё за два дня</li>
+    </ul>
 </div>
 
 <section class="slide white clear">
